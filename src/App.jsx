@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { formatWeatherDataDaily } from "./utils/formatWeatherDataDaily";
 import TodayCard from "./components/TodayCard";
 import WeekDayCard from "./components/WeekDayCard";
+import styled from "styled-components";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -65,36 +66,37 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen h-max  bg-cyan-600 flex justify-center items-start p-8 md:px-20">
-        <p className="text-center">Chargement ...</p>
-      </div>
+      <Container>
+        <Message>
+          Loading...
+        </Message>
+      </Container>
     );
   }
 
   if (!isLoading && weatherData.length === 0) {
     return (
-      <div className="min-h-screen h-max  bg-cyan-600 flex justify-center items-start p-8 md:px-20">
-        <p className="text-center">
-          Aucune données n'a pu être récupérée. Merci de réessayer.
-        </p>
-      </div>
+      <Container>
+        <Message>
+          No result, please try again...
+        </Message>
+      </Container>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen h-max  bg-cyan-600 flex justify-center items-start p-8 md:px-20">
-        <p className="text-red-500 text-center">
-          Une erreur est survenue lors de la récupération des prévisions météo
-          ...
-        </p>
-      </div>
+      <Container>
+        <Message>
+          Error append when trying to fetch weather info...
+        </Message>
+      </Container>
     );
   }
 
   return (
-    <div className="min-h-screen h-max  bg-cyan-600 flex justify-center items-start p-8 md:px-20 ">
-      <div className="w-full max-w-7xl bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg shadow-lg px-4 py-4 xl:py-12 xl:px-28 md:px-12 md:py-8 ">
+    <Container>
+      <WeatherInfo>
         <TodayCard data={weatherData[0]} weatherUnits={weatherUnits} />
         <div className=" grid grid-cols-1 gap-6 md:grid-cols-3 xl:grid-cols-6">
           {weatherData &&
@@ -108,9 +110,34 @@ function App() {
                 />
               ))}
         </div>
-      </div>
-    </div>
+      </WeatherInfo>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+const Message = styled.p`
+  font-size: 20px;
+  color: white;
+  font-family: Poppins;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+`
+
+const WeatherInfo = styled.div`
+  width: 30%;
+  height: 50%;
+  background-color: #333333D9;
+  backdrop-filter: blur(8px);
+  border-radius: 8px;
+`
 
 export default App;
